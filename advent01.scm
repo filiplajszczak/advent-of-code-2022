@@ -1,0 +1,40 @@
+(use-modules (srfi srfi-1)
+             (srfi srfi-13)
+             (srfi srfi-64)
+             ((f))
+             ((algorithms)))
+
+(define (part-1 filename)
+  (apply max (map sum (input filename))))
+
+(define (part-2 filename)
+  (sum (take (sort (map sum (input filename)) >) 3)))
+
+(define (input filename)
+  (map
+   (lambda (str)
+     (map string->number (string-split str #\newline)))
+   (string->paragraphs (string-trim-both (read-text filename)))))
+
+(define (string->paragraphs str)
+  (let ((paragraph-break (string-contains str "\n\n")))
+    (if paragraph-break
+        (cons
+         (string-take str paragraph-break)
+         (string->paragraphs (string-drop str (+ 2 paragraph-break))))
+        (cons str '()))))
+
+;; Part 1
+(display (part-1 "day01.in"))
+(newline)
+;; Part 2
+(display (part-2 "day01.in"))
+(newline)
+
+;; Tests
+(test-begin "example")
+
+(test-equal "Test part 1"  24000 (part-1 "day01-example.in"))
+(test-equal "Test part 2" 45000 (part-2 "day01-example.in"))
+
+(test-end "example")
