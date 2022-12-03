@@ -1,3 +1,6 @@
+#!/usr/bin/guile -s
+!#
+
 (use-modules (srfi srfi-1)
              (srfi srfi-13)
              (srfi srfi-64)

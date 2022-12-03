@@ -1,3 +1,6 @@
+#!/usr/bin/guile -s
+!#
+
 (use-modules (ice-9 match)
              (srfi srfi-64)
              ((f))
