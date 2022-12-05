@@ -3,7 +3,6 @@
 
 (use-modules (srfi srfi-1)
              (srfi srfi-64)
-             (ice-9 pretty-print)
              ((f))
              ((algorithms)))
 
@@ -16,10 +15,11 @@
 
 (define (parse-command line)
   (let ([splitted (string-split line #\space)])
-    (map string->number (filter
-                         (λ (str)
-                            (string-every char-numeric? str))
-                         splitted))))
+    (map string->number
+         (filter
+          (λ (str)
+            (string-every char-numeric? str))
+          splitted))))
 
 (define (parse lines boxes commands)
   (cond
@@ -44,32 +44,31 @@
 (define (execute original-boxes boxes command index proc)
   (let ([move (first command)]
         [from (- (second command) 1)]
-        [to (- (third command) 1)])
+        [to (- (third command) 1)]
+        [aux (λ () (execute original-boxes (cdr boxes) command (+ index 1) proc))])
     (cond [(null? boxes) '()]
           [(eq? index from)
-           (cons
-            (drop-right (car boxes) move)
-            (execute original-boxes (cdr boxes) command (+ index 1) proc))]
+           (cons (drop-right (car boxes) move) (aux))]
           [(eq? index to)
            (cons
             (append (car boxes) (proc (take-right (list-ref original-boxes from) move)))
-            (execute original-boxes (cdr boxes) command (+ index 1) proc))]
-          [else (cons
-                 (car boxes)
-                 (execute original-boxes (cdr boxes) command (+ index 1) proc))])))
+            (aux))]
+          [else (cons (car boxes) (aux))])))
 
 (define (execute-all boxes commands proc)
   (if (null? commands)
       (list->string (map last boxes))
       (execute-all (execute boxes boxes (car commands) 0 proc) (cdr commands) proc)))
 
-(define (part-1 filename)
+(define (solve filename proc)
   (let ([data (parse (input filename) '() '())])
-    (execute-all (first data) (last data) reverse)))
+    (execute-all (first data) (last data) proc)))
+
+(define (part-1 filename)
+  (solve filename reverse))
 
 (define (part-2 filename)
-  (let ([data (parse (input filename) '() '())])
-    (execute-all (first data) (last data) identity)))
+  (solve filename identity))
 
 (define (input filename)
    (read-lines filename))
