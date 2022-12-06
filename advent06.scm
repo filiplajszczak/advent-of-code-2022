@@ -7,7 +7,7 @@
              ((algorithms)))
 
 (define (scan lst index size)
-  (if (eq? ((compose length char-set->list list->char-set) (car lst)) size)
+  (if (eq? (char-set-size (list->char-set (car lst))) size)
       index
       (scan (cdr lst) (+ index 1) size)))
 
