@@ -24,7 +24,7 @@
 
 (define (part-2 filename)
   (sum (map
-        (compose char->priority first char-set->list (lambda (lst) (apply char-set-intersection lst)))
+        (compose char->priority first char-set->list (λ (lst) (apply char-set-intersection lst)))
         (chunks-of (map
                     (compose list->char-set string->list)
                     (input filename))

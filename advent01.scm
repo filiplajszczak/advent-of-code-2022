@@ -15,8 +15,7 @@
 
 (define (input filename)
   (map
-   (lambda (str)
-     (map string->number (string-split str #\newline)))
+   (λ (str) (map string->number (string-split str #\newline)))
    (string->paragraphs (string-trim-both (read-text filename)))))
 
 (define (string->paragraphs str)

@@ -71,7 +71,7 @@
 
 (define (input filename)
   (map
-   (lambda (chars) (map char->number chars))
+   (λ (chars) (map char->number chars))
    (map string->list
         (read-lines filename))))
 
