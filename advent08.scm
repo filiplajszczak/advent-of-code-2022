@@ -11,20 +11,19 @@
   (- (char->integer chr) 48))
 
 (define (check-rows rows columns rows-i columns-i proc)
-  (define (iter-rows remaining-rows row-index)
+  (let iter-rows ([remaining-rows rows] [row-index 0])
     (if (null? remaining-rows)
         '()
         (cons (proc (car remaining-rows) rows columns rows-i columns-i row-index)
-              (iter-rows (cdr remaining-rows) (+ 1 row-index)))))
-  (iter-rows rows 0))
+              (iter-rows (cdr remaining-rows) (+ 1 row-index))))))
 
 (define (zero-max . x)
   (if (null? x) -1 (apply max x)))
 
 (define (check-columns-visible row rows columns rows-i columns-i row-index)
-  (define (iter-trees row tree-index)
+  (let iter-trees ([row row] [tree-index 0])
     (define (tree-ok?)
-      (pair? (filter (lambda (side) (> (car row) (apply zero-max side)))
+      (pair? (filter (λ (side) (> (car row) (apply zero-max side)))
                      (list
                       (take (list-ref rows row-index) tree-index)
                       (take-right (list-ref rows row-index) (- columns-i tree-index 1))
@@ -33,18 +32,16 @@
     (cond [(null? row) '()]
           [(tree-ok?)
            (cons #t (iter-trees (cdr row) (+ 1 tree-index)))]
-          [else (iter-trees (cdr row) (+ 1 tree-index))]))
-  (iter-trees row 0))
+          [else (iter-trees (cdr row) (+ 1 tree-index))])))
 
 (define (check-columns-scenic row rows columns rows-i columns-i row-index)
-  (define (iter-trees row tree-index)
+  (let iter-trees ([row row][tree-index 0])
     (define (scenic-score)
-      (product (map (lambda (side)
-                      (define (iter side acc)
+      (product (map (λ (side)
+                      (let iter ([side side] [acc 0])
                         (cond [(null? side) acc]
                               [(>= (car side) (car row)) (+ 1 acc)]
-                              [else (iter (cdr side) (+ 1 acc))]))
-                      (iter side 0))
+                              [else (iter (cdr side) (+ 1 acc))])))
                     (list
                      (reverse (take (list-ref rows row-index) tree-index))
                      (take-right (list-ref rows row-index) (- columns-i tree-index 1))
@@ -52,8 +49,7 @@
                      (take-right (list-ref columns tree-index) (- rows-i row-index 1))))))
     (if (null? row)
         '()
-        (cons (scenic-score) (iter-trees (cdr row) (+ 1 tree-index)))))
-  (iter-trees row 0))
+        (cons (scenic-score) (iter-trees (cdr row) (+ 1 tree-index))))))
 
 (define (solve-visible rows)
   (let* ([columns (apply zip rows)]
