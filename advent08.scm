@@ -20,16 +20,20 @@
 (define (zero-max . x)
   (if (null? x) -1 (apply max x)))
 
+(define (directions rows columns tree-index columns-i rows-i row-index part)
+  (let ([proc (if (eq? part 'scenic) reverse identity)])
+    (list
+     (proc (take (list-ref rows row-index) tree-index))
+     (take-right (list-ref rows row-index) (- columns-i tree-index 1))
+     (proc (take (list-ref columns tree-index) row-index))
+     (take-right (list-ref columns tree-index) (- rows-i row-index 1)))))
+
 (define (check-columns-visible row rows columns rows-i columns-i row-index)
   (let iter-trees ([row row] [tree-index 0])
     (let ([tree-ok?
            (λ () (pair?
                   (filter (λ (side) (> (car row) (apply zero-max side)))
-                          (list
-                           (take (list-ref rows row-index) tree-index)
-                           (take-right (list-ref rows row-index) (- columns-i tree-index 1))
-                           (take (list-ref columns tree-index) row-index)
-                           (take-right (list-ref columns tree-index) (- rows-i row-index 1))))))])
+                          (directions rows columns tree-index columns-i rows-i row-index 'visible))))])
       (cond [(null? row) '()]
             [(tree-ok?)
              (cons #t (iter-trees (cdr row) (+ 1 tree-index)))]
@@ -47,11 +51,7 @@
                           (product
                            (map
                             (λ (side) (calculate-score side row))
-                            (list
-                             (reverse (take (list-ref rows row-index) tree-index))
-                             (take-right (list-ref rows row-index) (- columns-i tree-index 1))
-                             (reverse (take (list-ref columns tree-index) row-index))
-                             (take-right (list-ref columns tree-index) (- rows-i row-index 1))))))])
+                            (directions rows columns tree-index columns-i rows-i row-index 'scenic))))])
       (if (null? row)
           '()
           (cons (scenic-score) (iter-trees (cdr row) (+ 1 tree-index)))))))
