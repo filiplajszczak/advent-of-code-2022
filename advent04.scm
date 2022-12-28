@@ -8,7 +8,8 @@
              ((f) #:select (read-lines)))
 
 (define (parse-line line)
-  (map (λ (range) (map string->number (string-split range #\-)))(string-split line #\,)))
+  (map (λ (range) (map string->number (string-split range #\-)))
+       (string-split line #\,)))
 
 (define (contains? line)
   (let ([selections (parse-line line)])

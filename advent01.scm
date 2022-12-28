@@ -20,7 +20,7 @@
    (string->paragraphs (string-trim-both (read-text filename)))))
 
 (define (string->paragraphs str)
-  (let ((paragraph-break (string-contains str "\n\n")))
+  (let ([paragraph-break (string-contains str "\n\n")])
     (if paragraph-break
         (cons
          (string-take str paragraph-break)
