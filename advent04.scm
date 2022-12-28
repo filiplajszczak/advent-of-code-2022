@@ -1,10 +1,11 @@
 #!/usr/bin/guile -s
 !#
 
-(use-modules (srfi srfi-1)
-             (srfi srfi-64)
-             ((f))
-             ((algorithms)))
+(use-modules ((srfi srfi-1) #:select (first last))
+             ((srfi srfi-64) #:select (test-begin
+                                       test-end
+                                       test-equal))
+             ((f) #:select (read-lines)))
 
 (define (parse-line line)
   (map (λ (range) (map string->number (string-split range #\-)))(string-split line #\,)))

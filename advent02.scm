@@ -1,10 +1,12 @@
 #!/usr/bin/guile -s
 !#
 
-(use-modules (ice-9 match)
-             (srfi srfi-64)
-             ((f))
-             ((algorithms)))
+(use-modules ((ice-9 match) #:select (match))
+             ((srfi srfi-64) #:select (test-begin
+                                       test-end
+                                       test-equal))
+             ((f) #:select (read-lines))
+             ((algorithms) #:select (sum)))
 
 (define (part-1 filename)
   (sum (map score (input filename))))

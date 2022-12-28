@@ -1,10 +1,11 @@
 #!/usr/bin/guile -s
 !#
 
-(use-modules (srfi srfi-1)
-             (srfi srfi-64)
-             ((f))
-             ((algorithms)))
+(use-modules ((srfi srfi-64) #:select (test-begin
+                                       test-end
+                                       test-equal))
+             ((f) #:select (read-text))
+             ((algorithms) #:select (sliding)))
 
 (define (scan lst index size)
   (if (eq? (char-set-size (list->char-set (car lst))) size)

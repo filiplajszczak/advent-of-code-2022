@@ -1,10 +1,18 @@
 #!/usr/bin/guile -s
 !#
 
-(use-modules (srfi srfi-1)
-             (srfi srfi-64)
-             ((f))
-             ((algorithms)))
+(use-modules ((srfi srfi-1) #:select (drop-right
+                                      first
+                                      last
+                                      second
+                                      take-right
+                                      third
+                                      zip))
+             ((srfi srfi-64) #:select (test-begin
+                                       test-end
+                                       test-equal))
+             ((f) #:select (read-lines))
+             ((algorithms) #:select (chunks-of)))
 
 (define (parse-boxes line)
   (map

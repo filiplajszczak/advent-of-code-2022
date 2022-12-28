@@ -1,11 +1,12 @@
 #!/usr/bin/guile -s
 !#
 
-(use-modules (srfi srfi-1)
-             (srfi srfi-13)
-             (srfi srfi-64)
-             ((f))
-             ((algorithms)))
+(use-modules ((srfi srfi-1) #:select (take))
+             ((srfi srfi-64) #:select (test-begin
+                                       test-end
+                                       test-equal))
+             ((f) #:select (read-text))
+             ((algorithms) #:select (sum)))
 
 (define (part-1 filename)
   (apply max (map sum (input filename))))

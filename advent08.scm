@@ -1,11 +1,12 @@
 #!/usr/bin/guile -s
 !#
 
-(use-modules (srfi srfi-1)
-             (srfi srfi-64)
-             (ice-9 pretty-print)
-             ((f))
-             ((algorithms)))
+(use-modules ((srfi srfi-1) #:select (take take-right zip))
+             ((srfi srfi-64) #:select (test-begin
+                                       test-end
+                                       test-equal))
+             ((f) #:select (read-lines))
+             ((algorithms) #:select (flatten product)))
 
 (define (char->number chr)
   (- (char->integer chr) 48))

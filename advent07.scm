@@ -1,10 +1,12 @@
 #!/usr/bin/guile -s
 !#
 
-(use-modules (srfi srfi-1)
-             (srfi srfi-64)
-             ((f))
-             ((algorithms)))
+(use-modules ((srfi srfi-1) #:select (first last remove second))
+             ((srfi srfi-64) #:select (test-begin
+                                       test-end
+                                       test-equal))
+             ((f) #:select (read-lines))
+             ((algorithms) #:select (init sum)))
 
 (define (update-acc acc pwd size)
   (if (null? pwd)
